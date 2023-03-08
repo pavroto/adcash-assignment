@@ -11,5 +11,14 @@ Language: Python
 
 Framework: Django
 
+
+
+### Default user:
+
 ---
-README v1.1
+Login:  admin
+
+Pass:   Admin1234
+
+---
+README v1.2
