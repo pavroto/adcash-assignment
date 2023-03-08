@@ -12,4 +12,11 @@ Language: Python
 Framework: Django
 
 ---
-README v1.1
+
+### Attention!
+This project uses external "django-extensions" packet
+
+Use next command to troubleshoot: ***pip install django-extensions***
+
+---
+README v1.2
