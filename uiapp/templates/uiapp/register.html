@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <header>
+        <h1>Sign In</h1>
+        <a href="{% url 'uiapp:index' %}">Home page</a>
+        <a href="{% url 'uiapp:signin' %}">Sign in</a>
+
+        <br><br>
+    </header>
+
+    <form>
+        <table>
+            <tr>
+                <td>
+                    <label for="first_name">First name</label><br>
+                    <input type="text" name="first_name">
+                </td>
+                <td>
+                    <label for="second_name">Second name</label><br>
+                    <input type="text" name="second_name">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="username">Username</label><br>
+                    <input type="text" name="username">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="psw">Password</label><br>
+                    <input type="password" name="psw">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="psw_rp">Repeat password</label><br>
+                    <input type="password" name="psw_rp">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="submit" value="submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+
+</body>
+</html>
