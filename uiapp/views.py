@@ -7,3 +7,7 @@ def index(request):
 
 def signin(request):
     return render(request, 'uiapp/signin.html')
+
+
+def register(request):
+    return render(request, 'uiapp/register.html')
