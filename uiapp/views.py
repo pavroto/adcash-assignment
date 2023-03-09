@@ -21,10 +21,10 @@ def register(request):
             "psw_rp": request.POST['psw_rp']  # psw_rp means password repeat
         }
 
-        input_map = input_test(input_map, if_signin=True)
+        test_output = input_test(input_map, if_signin=True)
 
-        if type(input_map) == list:     # input_test() returns list only in case of errors
-            return render(request, 'uiapp/register.html', {"error_list": input_map})
+        if test_output[1]:
+            return render(request, 'uiapp/register.html', {"error_list": test_output[1]})
         else:
             return HttpResponseRedirect(reverse('uiapp:index'),)
 
