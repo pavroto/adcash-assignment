@@ -1,5 +1,5 @@
 from django.shortcuts import render, reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from .guard import input_test
 
 
@@ -21,11 +21,15 @@ def register(request):
             "psw_rp": request.POST['psw_rp']  # psw_rp means password repeat
         }
 
-        test_output = input_test(input_map, if_signin=True)
+        test_output = input_test(input_map, case='REGISTER')
 
         if test_output[1]:
             return render(request, 'uiapp/register.html', {"error_list": test_output[1]})
+
+        elif test_output[0] is not None:
+            return HttpResponseRedirect(reverse('uiapp:index'), )
+
         else:
-            return HttpResponseRedirect(reverse('uiapp:index'),)
+            return Http404
 
     return render(request, 'uiapp/register.html')
