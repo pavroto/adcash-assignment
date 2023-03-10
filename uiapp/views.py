@@ -1,8 +1,8 @@
-from django.shortcuts import render, reverse,redirect
+from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect, Http404
 from .guard import input_test
 
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 
 
@@ -13,7 +13,17 @@ def index(request):
 
 
 def signin(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('uiapp:index'))
     return render(request, 'uiapp/signin.html')
+
+
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+        return HttpResponseRedirect(reverse('uiapp:index'))
+    else:
+        return HttpResponseRedirect(reverse('uiapp:index'))
 
 
 def register(request):
