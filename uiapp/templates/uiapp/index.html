@@ -6,9 +6,16 @@
 </head>
 <body>
     <header>
-        <h1>Home page</h1><br>
-        <a href="{% url 'uiapp:signin' %}">Sign in</a>
-        <a href="{% url 'uiapp:register' %}">Register</a>
+        <h1>Home page</h1>
+        {% if question %}
+            <p>Hello {{ question }}!</p>
+            <a href="{% url 'uiapp:signin' %}">Profile</a>
+            <a href="{% url 'uiapp:register' %}">Log out</a>
+        {% else %}
+            <br>
+            <a href="{% url 'uiapp:signin' %}">Sign in</a>
+            <a href="{% url 'uiapp:register' %}">Register</a>
+        {% endif %}
     </header>
 </body>
 </html>
