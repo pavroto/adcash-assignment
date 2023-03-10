@@ -57,25 +57,10 @@ def input_test(input_map, case):
             return psw, 0
 
     if case == 'LOGIN':
-        error_list = []
-        for key, value in input_map.items():
-            if key == 'username':
-                function_output, error = username_check(input_map[key])
-            elif key == 'psw':
-                function_output, error = psw_check(input_map[key])
-            else:
-                return [None, None]
-
-            if error:
-                error_list.append(function_output)
-                continue
-            input_map[key] = function_output
-
-        if len(error_list) != 0:
-            error_list = [*set(error_list)]
-            return [None, error_list]
-        else:
-            return [input_map, None]
+        input_map['username'], error = username_check(input_map['username'])
+        if error:
+            return [None, [error]]
+        return [input_map, None]
 
     elif case == 'REGISTER':
         error_list = []
