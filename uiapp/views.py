@@ -1,4 +1,4 @@
-from django.shortcuts import render, reverse, redirect
+from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect, Http404
 from .guard import input_test
 
@@ -12,12 +12,6 @@ def index(request):
     return render(request, 'uiapp/index.html')
 
 
-def signin(request):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('uiapp:index'))
-    return render(request, 'uiapp/signin.html')
-
-
 def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
@@ -26,14 +20,37 @@ def logout_view(request):
         return HttpResponseRedirect(reverse('uiapp:index'))
 
 
-def register(request):
-
+def signin(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('uiapp:index'))
 
     if request.method == 'POST':
+        input_map = {
+            "username": request.POST['username'],
+            "psw": request.POST['psw']
+        }
+
+        test_output = input_test(input_map, case='LOGIN')
+
+        if test_output[0] is not None:
+            user = authenticate(request, username=test_output[0]['username'], password=test_output[0]['psw'])
+
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse('uiapp:index'))
+
+            else:
+                return render(request, 'uiapp/register.html',
+                              {"error_list": ["Invalid login"]})
+
+    return render(request, 'uiapp/signin.html')
 
 
+def register(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('uiapp:index'))
+
+    if request.method == 'POST':
 
         input_map = {
             "first_name": request.POST['first_name'],
@@ -49,7 +66,8 @@ def register(request):
 
             try:
                 user = User.objects.get(username=test_output[0]['username'])
-                return render(request, 'uiapp/register.html', {"error_list": ["User with this username already exists"]})
+                return render(request, 'uiapp/register.html',
+                              {"error_list": ["User with this username already exists"]})
 
             except User.DoesNotExist:
                 User.objects.create_user(username=test_output[0]['username'], email=None,
