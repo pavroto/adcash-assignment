@@ -38,10 +38,10 @@ def signin(request):
             if user is not None:
                 login(request, user)
                 return HttpResponseRedirect(reverse('uiapp:index'))
+        elif test_output[1] is not None:
+            return render(request, 'uiapp/signin.html', {"error_list": test_output[1]})
 
-            else:
-                return render(request, 'uiapp/register.html',
-                              {"error_list": ["Invalid login"]})
+        return render(request, 'uiapp/signin.html', {"error_list": ["Invalid login"]})
 
     return render(request, 'uiapp/signin.html')
 
