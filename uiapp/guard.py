@@ -1,4 +1,3 @@
-import hashlib
 import re
 
 NAME_MIN_LENGTH = 2
@@ -9,14 +8,6 @@ USERNAME_MAX_LENGTH = 20
 
 PASSWORD_MIN_LENGTH = 8
 PASSWORD_MAX_LENGTH = 20
-
-
-def hashing(psw):
-    psw = psw.encode() + b"6b5450e51be27571c15011ea41c53c1f"  # salting
-    hashed_psw = hashlib.sha512()
-    hashed_psw.update(psw)
-
-    return hashed_psw.hexdigest()
 
 
 def input_test(input_map, case):
@@ -56,14 +47,14 @@ def input_test(input_map, case):
     def psw_check(psw):
         """
         Check that passwords follow next rules:
-            - Are PASSWORD_MIN_LENGTH - PASSWORD_MAX_LENGTH characters long
+            - Are PASSWORD_MIN_LENGTH to PASSWORD_MAX_LENGTH characters long
         Then the password is hashed and returned as a hex hash
         """
 
         if len(psw) < PASSWORD_MIN_LENGTH or len(psw) > PASSWORD_MAX_LENGTH:
             return f"Password must be from {PASSWORD_MIN_LENGTH} to {PASSWORD_MAX_LENGTH} characters", 1
         else:
-            return hashing(psw), 0
+            return psw, 0
 
     if case == 'LOGIN':
         return {None, None}
