@@ -20,7 +20,7 @@ MONTHLY_INTEREST = 5  # in percent
 
 def monthly_interest_calculation(amount, months):
     debt = amount * ((1 + MONTHLY_INTEREST / 100) ** months)
-    return debt
+    return round(debt, 2)
 
 
 def input_test(input_map, case, request=None):
@@ -77,7 +77,7 @@ def input_test(input_map, case, request=None):
         if amount < APPLY_MIN_AMOUNT or amount > APPLY_MAX_AMOUNT:
             return f"Amount can  be from {APPLY_MIN_AMOUNT} to {APPLY_MAX_AMOUNT} euro", 1
 
-        return amount, 0
+        return round(amount, 2), 0
 
     def term_check(term):
         if type(term) != int:
