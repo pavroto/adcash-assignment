@@ -1,12 +1,9 @@
-from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import reverse
+from django.http import JsonResponse
 from uiapp.models import Loan
-from .serializers import ListLoansSerializer, ListErrorsSerializer
+from .serializers import ListLoansSerializer
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 
 from .serializers import ListErrorsSerializer, Errors
 
