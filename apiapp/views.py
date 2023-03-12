@@ -57,7 +57,6 @@ class ApplyLoansView(APIView):
             return JsonResponse({'status': "Success"})
 
         elif test_output[1] is not None:
-            # return JsonResponse({'error_list': test_output[1]})
             obj = Errors(test_output[1])
             serializer = ListErrorsSerializer(obj)
             return JsonResponse({'status': serializer.data})
