@@ -41,7 +41,7 @@ def apply(request):
 
                 loan = Loan.objects.create(amount=test_output[0]['amount'],
                                            term=term,
-                                           user=User.objects.get(username=request.user.get_username()),
+                                           user=request.user,
                                            debt=debt)
                 loan.save()
             elif test_output[1] is not None:
