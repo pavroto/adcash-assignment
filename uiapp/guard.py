@@ -76,7 +76,10 @@ def input_test(input_map, case, request=None):
     def amount_check(amount):
 
         if type(amount) != float:
-            return "Invalid amount input", 1
+            try:
+                amount = float(amount)
+            except:
+                return "Invalid amount input", 1
 
         if amount < APPLY_MIN_AMOUNT or amount > APPLY_MAX_AMOUNT:
             return f"Amount can  be from {APPLY_MIN_AMOUNT} to {APPLY_MAX_AMOUNT} euro", 1
@@ -85,7 +88,10 @@ def input_test(input_map, case, request=None):
 
     def term_check(term):
         if type(term) != int:
-            return "Invalid term input", 1
+            try:
+                term = int(term)
+            except:
+                return "Invalid term input", 1
 
         if term < APPLY_MIN_MONTHS or term > APPLY_MAX_MONTHS:
             return f"Term can be from {APPLY_MIN_MONTHS} to {APPLY_MAX_MONTHS} months", 1
