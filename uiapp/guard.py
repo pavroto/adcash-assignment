@@ -9,8 +9,21 @@ USERNAME_MAX_LENGTH = 20
 PASSWORD_MIN_LENGTH = 8
 PASSWORD_MAX_LENGTH = 20
 
+APPLY_MIN_AMOUNT = 1000
+APPLY_MAX_AMOUNT = 100000
 
-def input_test(input_map, case):
+APPLY_MIN_MONTHS = 6
+APPLY_MAX_MONTHS = 120
+
+MONTHLY_INTEREST = 5  # in percent
+
+
+def monthly_interest_calculation(amount, months):
+    debt = amount * ((1 + MONTHLY_INTEREST / 100) ** months)
+    return debt
+
+
+def input_test(input_map, case, request=None):
     def name_check(name):
         """
         In Name english letters are only allowed characters
@@ -56,6 +69,27 @@ def input_test(input_map, case):
         else:
             return psw, 0
 
+    def amount_check(amount):
+
+        if type(amount) != float:
+            return "Invalid amount input", 1
+
+        if amount < APPLY_MIN_AMOUNT or amount > APPLY_MAX_AMOUNT:
+            return f"Amount can  be from {APPLY_MIN_AMOUNT} to {APPLY_MAX_AMOUNT} euro", 1
+
+        return amount, 0
+
+    def term_check(term):
+        if type(term) != int:
+            return "Invalid term input", 1
+
+        if term < APPLY_MIN_MONTHS or term > APPLY_MAX_MONTHS:
+            return f"Term can be from {APPLY_MIN_MONTHS} to {APPLY_MAX_MONTHS} months", 1
+
+        return term, 0
+
+    ################################################################################################
+
     if case == 'LOGIN':
         input_map['username'], error = username_check(input_map['username'])
         if error:
@@ -87,6 +121,34 @@ def input_test(input_map, case):
             error_list = [*set(error_list)]
             return [None, error_list]
 
+        else:
+            return [input_map, None]
+
+    elif case == 'APPLY':
+        error_list = []
+
+        input_map['first_name'], error = name_check(input_map['first_name'])
+        if error:
+            error_list.append(input_map['first_name'])
+
+        input_map['second_name'], error = name_check(input_map['second_name'])
+        if error:
+            error_list.append(input_map['second_name'])
+
+        input_map['amount'], error = amount_check(input_map['amount'])
+        if error:
+            error_list.append(input_map['amount'])
+
+        input_map['term'], error = term_check(input_map['term'])
+        if error:
+            error_list.append(input_map['term'])
+
+        if input_map['first_name'] + " " + input_map['second_name'] != request.user.get_full_name():
+            error_list.append("This name does not correspond this user")
+
+        if len(error_list) != 0:
+            error_list = [*set(error_list)]
+            return [None, error_list]
         else:
             return [input_map, None]
 
