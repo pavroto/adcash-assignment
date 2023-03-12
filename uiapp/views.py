@@ -68,7 +68,10 @@ def profile(request):  # todo profile view
 def list_loans(request):  # todo list_loans view
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('uiapp:index'))
-    return HttpResponseRedirect(reverse('uiapp:index'))
+
+    user_loans = Loan.objects.filter(user=request.user).all()
+
+    return render(request, 'uiapp/list_loans.html', {'user_loans': user_loans})
 
 
 def logout_view(request):
