@@ -1,4 +1,6 @@
 import re
+import datetime
+from .models import Loan, BlackList
 
 NAME_MIN_LENGTH = 2
 NAME_MAX_LENGTH = 20
@@ -14,6 +16,8 @@ APPLY_MAX_AMOUNT = 100000
 
 APPLY_MIN_MONTHS = 6
 APPLY_MAX_MONTHS = 120
+
+APPLY_DAILY_LIMIT = 2
 
 MONTHLY_INTEREST = 5  # in percent
 
@@ -145,6 +149,19 @@ def input_test(input_map, case, request=None):
 
         if input_map['first_name'] + " " + input_map['second_name'] != request.user.get_full_name():
             error_list.append("This name does not correspond this user")
+
+        today_user_loans = Loan.objects.filter(user=request.user).all()
+        i = 0
+        for loan in today_user_loans:
+            if loan.get_timestamp().date() == datetime.date.today():
+                i += 1
+            if i >= APPLY_DAILY_LIMIT:
+                error_list.append("You reached the limit for today.")
+                break
+
+        blocked_user = BlackList.objects.filter(user=request.user).get()
+        if blocked_user:
+            error_list.append(f"You are black listed. Comment: {blocked_user.comment}")
 
         if len(error_list) != 0:
             error_list = [*set(error_list)]
