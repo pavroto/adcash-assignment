@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from .forms import ApplyForm
 from .models import Loan
 from datetime import datetime, timedelta
+from rest_framework.authtoken.models import Token
 
 
 def index(request):
@@ -14,7 +15,7 @@ def index(request):
     return render(request, 'uiapp/index.html')
 
 
-def apply(request):  # todo apply view
+def apply(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('uiapp:index'))
 
@@ -57,15 +58,16 @@ def apply(request):  # todo apply view
         return render(request, 'uiapp/apply.html', {'form': form})
 
 
-def profile(request):  # todo profile view
+def profile(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('uiapp:index'))
 
     return render(request, 'uiapp/profile.html', {'username': request.user.get_username(),
-                                                  'full_name': request.user.get_full_name()})
+                                                  'full_name': request.user.get_full_name(),
+                                                  'token': Token.objects.get(user=request.user).key})
 
 
-def list_loans(request):  # todo list_loans view
+def list_loans(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('uiapp:index'))
 
@@ -132,15 +134,19 @@ def register(request):
                               {"error_list": ["User with this username already exists"]})
 
             except User.DoesNotExist:
-                User.objects.create_user(username=test_output[0]['username'],
-                                         email=None,
-                                         password=test_output[0]['psw'],
-                                         first_name=test_output[0]['first_name'],
-                                         last_name=test_output[0]['second_name'])
+                user = User.objects.create_user(username=test_output[0]['username'],
+                                                email=None,
+                                                password=test_output[0]['psw'],
+                                                first_name=test_output[0]['first_name'],
+                                                last_name=test_output[0]['second_name'])
+                user.save()
+
+                Token.objects.create(user=user)
 
                 user = authenticate(request, username=test_output[0]['username'], password=test_output[0]['psw'])
                 if user is not None:
                     login(request, user)
+
                     return HttpResponseRedirect(reverse('uiapp:index'))
             return Http404()
 
