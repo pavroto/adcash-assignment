@@ -159,9 +159,11 @@ def input_test(input_map, case, request=None):
                 error_list.append("You reached the limit for today.")
                 break
 
-        blocked_user = BlackList.objects.filter(user=request.user).get()
-        if blocked_user:
+        try:
+            blocked_user = BlackList.objects.filter(user=request.user).get()
             error_list.append(f"You are black listed. Comment: {blocked_user.comment}")
+        except BlackList.DoesNotExist:
+            pass
 
         if len(error_list) != 0:
             error_list = [*set(error_list)]
