@@ -70,8 +70,10 @@ def register(request):
                               {"error_list": ["User with this username already exists"]})
 
             except User.DoesNotExist:
-                User.objects.create_user(username=test_output[0]['username'], email=None,
-                                         password=test_output[0]['psw'], first_name=test_output[0]['first_name'],
+                User.objects.create_user(username=test_output[0]['username'],
+                                         email=None,
+                                         password=test_output[0]['psw'],
+                                         first_name=test_output[0]['first_name'],
                                          last_name=test_output[0]['second_name'])
 
                 user = authenticate(request, username=test_output[0]['username'], password=test_output[0]['psw'])
