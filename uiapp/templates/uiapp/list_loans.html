@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>list_loans</title>
+
+    {% load static %}
+        <link href="{% static 'css/list_loans.css' %}" rel="stylesheet">
+
+</head>
+<body>
+    <h1>All your loans</h1>
+    <a href="{% url 'uiapp:index' %}">Home page</a>
+    <a href="{% url 'uiapp:profile' %}">Profile</a>
+    <a href="{% url 'uiapp:logout' %}">Log out</a>
+
+    {% if user_loans %}
+        <table>
+            <tr>
+                <th>Full name</th>
+                <th>Amount</th>
+                <th>Debt</th>
+                <th>Applied</th>
+                <th>Term</th>
+            </tr>
+
+        {% for loan in user_loans %}
+            <tr>
+                <td>{{ loan.get_full_name}}</td>
+                <td>{{ loan.get_amount}}</td>
+                <td>{{ loan.get_debt}}</td>
+                <td>{{ loan.get_timestamp}}</td>
+                <td>{{ loan.get_term}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+</body>
+</html>
